@@ -1,0 +1,36 @@
+body {
+    background-image: url('pool.jpg');
+    /* Path to your background image */
+    background-size: cover;
+    /* Cover the entire page */
+    background-repeat: no-repeat;
+    /* Do not repeat the image */
+    background-attachment: fixed;
+    /* Fixed background, scroll content */
+}
+
+.task-card {
+    margin-bottom: 10px;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.9);
+    /* White background with transparency */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.btn-custom-submit {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-custom-edit {
+    background-color: #FFD700;
+    color: black;
+}
+
+.btn-custom-delete {
+    background-color: #f44336;
+    color: white;
+}
