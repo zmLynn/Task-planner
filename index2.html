@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Planner App</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-4">
+    <!-- Task Form -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4>Create New Task</h4>
+      </div>
+      <div class="card-body">
+        <form id="taskForm">
+          <div class="form-group">
+            <label for="newTaskNameInput">Name</label>
+            <input type="text" class="form-control" id="newTaskNameInput" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="newTaskDescriptionInput">Description</label>
+            <textarea class="form-control" id="newTaskDescriptionInput" name="description" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="newAssignedToInput">Assigned To</label>
+            <input type="text" class="form-control" id="newAssignedToInput" name="assignedTo" required>
+          </div>
+          <div class="form-group">
+            <label for="newDueDateInput">Due Date</label>
+            <input type="date" class="form-control" id="newDueDateInput" name="dueDate" required>
+          </div>
+          <div class="form-group">
+            <label for="newStatusInput">Status</label>
+            <select class="form-control" id="newStatusInput" name="status" required>
+              <option value="Not Started">Not Started</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Task List -->
+    <div class="list-group">
+      <!-- Sample Task Card -->
+      <div class="list-group-item">
+        <div class="card">
+          <div class="card-body">
+            <ul>
+            <h5 class="card-title">Task Name</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Assigned To: John Doe</h6>
+            <p class="card-text">Description of the task goes here.</p>
+            <p class="card-text"><strong>Due Date:</strong> 2024-06-01</p>
+            <p class="card-text"><strong>Status:</strong> In Progress</p>
+            <a href="#" class="card-link">Edit</a>
+            <a href="#" class="card-link">Delete</a>
+        </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
