@@ -3,13 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title of the Document</title>
+    <title>Task Planner</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        /* CSS to hide the ordered list initially */
+        .sample-task-list {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">Task Planner</h1>
+
+        <!-- Task Input Form -->
         <form>
             <div class="form-group">
                 <label for="taskName">Name</label>
@@ -17,8 +25,7 @@
             </div>
             <div class="form-group">
                 <label for="taskDescription">Description</label>
-                <textarea class="form-control" id="taskDescription" rows="3" placeholder="Enter task description"
-                    required></textarea>
+                <textarea class="form-control" id="taskDescription" rows="3" placeholder="Enter task description" required></textarea>
             </div>
             <div class="form-group">
                 <label for="assignedTo">Assigned To</label>
@@ -38,8 +45,42 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+
+        <!-- Task List Component -->
+        <div class="list-group mt-3">
+            <!-- Sample Task Card -->
+            <a href="#" class="list-group-item list-group-item-action">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Sample Task</h5>
+                        <p class="card-text">This is a sample task description.</p>
+                        <p class="card-text">Assigned To: Jane Doe</p>
+                        <p class="card-text">Due Date: 2024-05-28</p>
+                        <p class="card-text">Status: In Progress</p>
+                        <!-- Button to toggle the ordered list -->
+                        <button class="btn btn-primary toggle-list-btn">Toggle List</button>
+                        <!-- Ordered list -->
+                        <ul class="list-group sample-task-list">
+                            <li class="list-group-item active">Sample one</li>
+                            <li class="list-group-item">Sample two</li>
+                            <li class="list-group-item">Sample three</li>
+                            <li class="list-group-item">Sample four</li>
+                            <li class="list-group-item">Sample five</li>
+                        </ul>
+                    </div>
+                </div>
+                
+            </a>
+        </div>
+
     </div>
 <script src="https://replit.com/public/js/replit-badge-v2.js" theme="dark" position="bottom-right"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    // JavaScript to toggle visibility of the ordered list
+    document.querySelector('.toggle-list-btn').addEventListener('click', function() {
+        document.querySelector('.sample-task-list').classList.toggle('d-block');
+    });
+</script>
 </body>
 </html>
