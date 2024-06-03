@@ -1,0 +1,37 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header, footer {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+}
+
+main {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+section {
+    width: 45%;
+}
+
+form {
+    width: 100%;
+}
+
+.list-group {
+    margin-top: 20px;
+}
+
+.card {
+    margin-bottom: 10px;
+}
+
+footer {
+    text-align: center;
+}
