@@ -1,37 +1,36 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+    background-image: url('pool.jpg');
+    /* Path to your background image */
+    background-size: cover;
+    /* Cover the entire page */
+    background-repeat: no-repeat;
+    /* Do not repeat the image */
+    background-attachment: fixed;
+    /* Fixed background, scroll content */
 }
 
-header, footer {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-}
-
-main {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-}
-
-section {
-    width: 45%;
-}
-
-form {
-    width: 100%;
-}
-
-.list-group {
-    margin-top: 20px;
-}
-
-.card {
+.task-card {
     margin-bottom: 10px;
 }
 
-footer {
-    text-align: center;
+.container {
+    background-color: rgba(255, 255, 255, 0.9);
+    /* White background with transparency */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.btn-custom-submit {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-custom-edit {
+    background-color: #FFD700;
+    color: black;
+}
+
+.btn-custom-delete {
+    background-color: #f44336;
+    color: white;
 }
