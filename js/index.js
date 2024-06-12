@@ -53,20 +53,19 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button class="btn btn-custom-delete btn-sm" onclick="deleteTask(${index})">Delete</button>
                         ` : ''}
                         <div class="comment-section mt-3">
-                        <h6>Comments</h6>
-                        <ul class="list-group" id="commentList-${index}"></ul>
-                        <form class="comment-form" id="commentForm-${index}">
-                        <div class="form-group">
-                        <textarea class="form-control" rows="3" placeholder="Add comment" id="comment-${index}"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
-                        </form>
+                            <h6>Comments</h6>
+                            <ul class="list-group" id="commentList-${index}"></ul>
+                            <form class="comment-form" id="commentForm-${index}">
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="3" placeholder="Add comment" id="comment-${index}"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
+                            </form>
                             ${task.status === 'Completed' ? `
                                 <button class="btn btn-custom-delete btn-sm" onclick="confirmDeleteTask(${index})">Delete Task</button>
                             ` : ''}
-            </div>
+                        </div>
                     </div>
-                     
                 </div>
             `;
 
@@ -95,6 +94,22 @@ document.addEventListener('DOMContentLoaded', () => {
     taskForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
+        const taskName = taskForm.taskName.value;
+        const dueDate = taskForm.dueDate.value;
+        const status = taskForm.status.value;
+
+        // Validate task name (only allow text)
+        if (!/^[a-zA-Z\s]+$/.test(taskName)) {
+            alert("Task name should contain only letters and spaces.");
+            return;
+        }
+
+        // Prevent past due date if the task status is "To Do"
+        if (status === 'To Do' && new Date(dueDate) < new Date()) {
+            alert("Due date cannot be in the past for 'To Do' tasks.");
+            return;
+        }
+
         // Get image file and convert to base64
         const fileInput = document.getElementById('taskImage');
         const file = fileInput.files[0];
@@ -102,11 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         reader.onloadend = function () {
             const newTask = {
-                name: taskForm.taskName.value,
+                name: taskName,
                 description: taskForm.taskDescription.value,
                 assignedTo: taskForm.assignedTo.value,
-                dueDate: taskForm.dueDate.value,
-                status: taskForm.status.value,
+                dueDate: dueDate,
+                status: status,
                 image: reader.result // base64 image string
             };
 
@@ -127,11 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // Handle case where no image is uploaded
             const newTask = {
-                name: taskForm.taskName.value,
+                name: taskName,
                 description: taskForm.taskDescription.value,
                 assignedTo: taskForm.assignedTo.value,
-                dueDate: taskForm.dueDate.value,
-                status: taskForm.status.value,
+                dueDate: dueDate,
+                status: status,
                 image: ''
             };
 
@@ -149,16 +164,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Function to delete a task
-// Function to delete a task
-window.deleteTask = (index) => {
-    const confirmDelete = confirm("Are you sure you want to delete this task permanently?");
-    if (confirmDelete) {
-        tasks.splice(index, 1);
-        saveTasksToLocalStorage();
-        displayTasks();
-    }
-};
-
+    window.deleteTask = (index) => {
+        const confirmDelete = confirm("Are you sure you want to delete this task permanently?");
+        if (confirmDelete) {
+            tasks.splice(index, 1);
+            saveTasksToLocalStorage();
+            displayTasks();
+        }
+    };
 
     // Function to edit a task
     window.editTask = (index) => {
