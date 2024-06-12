@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="loginForm" class="form-container">
+            <h2>Login</h2>
+            <form id="login">
+                <div class="form-group">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password:</label>
+                  <div style="position: relative">
+                    <input type="password" id="password" name="password" required />
+                    <span
+                      class="password-toggle-icon"
+                      onclick="togglePasswordVisibility()"
+                    >
+                      <i class="far fa-eye"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password Strength:</label>
+                  <progress id="password-strength-bar" value="0" max="100"></progress>
+                </div>
+                <div class="form-group">
+                  <input type="checkbox" id="remember-me" name="remember-me" />
+                  <label for="remember-me">Remember Me</label>
+                </div>
+                <button type="submit">Login</button>
+                <p>New user? <a href="#" id="showSignUp">Sign up</a></p>
+            </form>
+        </div>
+
+        <div id="signUpForm" class="form-container" style="display: none;">
+            <h2>Sign Up</h2>
+            <form id="signUp">
+                <div class="form-group">
+                    <label for="signUpUsername">Username</label>
+                    <input type="text" id="signUpUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="signUpPassword">Password</label>
+                    <input type="password" id="signUpPassword" required>
+                </div>
+                <button type="submit">Sign Up</button>
+                <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+            </form>
+        </div>
+    </div>
+    <script src="js/index.js"></script>
+</body>
+</html>
