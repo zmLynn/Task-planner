@@ -1,170 +1,178 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     const taskForm = document.getElementById('taskForm');
     const taskList = document.getElementById('taskList');
-    let editIndex = null; // To keep track of the task being edited
+    const commentForm = document.getElementById('commentForm');
+    const commentList = document.getElementById('commentList');
 
-    // Example tasks JSON data
-let tasks = [
-    {
-        name: "Sample Task 1",
-        description: "This is a description of sample task 1.",
-        assignedTo: "John Doe",
-        dueDate: "2024-06-01",
-        status: "To Do",
-        image: ""
-    },
-    {
-        name: "Sample Task 2",
-        description: "This is a description of sample task 2.",
-        assignedTo: "Jane Smith",
-        dueDate: "2024-06-02",
-        status: "In Progress",
-        image: ""
-    },
-    {
-        name: "Sample Task 3",
-        description: "This is a description of sample task 3.",
-        assignedTo: "Bob Johnson",
-        dueDate: "2024-06-03",
-        status: "Completed",
-        image: ""
-    },
-    {
-        name: "Sample Task 4",
-        description: "This is a description of sample task 4.",
-        assignedTo: "Alice Brown",
-        dueDate: "2024-06-04",
-        status: "To Do",
-        image: ""
-    },
-    {
-        name: "Sample Task 5",
-        description: "This is a description of sample task 5.",
-        assignedTo: "Charlie Davis",
-        dueDate: "2024-06-05",
-        status: "In Progress",
-        image: ""
-    }
-];
+    // Load tasks and comments from local storage
+    loadTasks();
+    loadComments();
 
-// Function to display tasks
-const displayTasks = () => {
-    taskList.innerHTML = '';
-    tasks.forEach((task, index) => {
-        const taskItem = document.createElement('div');
-        taskItem.className = 'col-md-4';
+    taskForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const taskName = document.getElementById('taskName').value;
+        const taskDescription = document.getElementById('taskDescription').value;
+        const assignedTo = document.getElementById('assignedTo').value;
+        const dueDate = document.getElementById('dueDate').value;
+        const status = document.getElementById('status').value;
+        const taskImage = document.getElementById('taskImage').files[0];
 
-        let statusClass = '';
-        switch (task.status) {
-            case 'To Do':
-                statusClass = 'to-do';
-                break;
-            case 'In Progress':
-                statusClass = 'in-progress';
-                break;
-            case 'Completed':
-                statusClass = 'completed';
-                break;
+        // Validate task name (only allow text)
+        if (!/^[a-zA-Z\s]+$/.test(taskName)) {
+            alert("Task name should contain only letters and spaces.");
+            return;
         }
 
-        taskItem.innerHTML = `
-            <div class="card task-card ${statusClass}">
-                <div class="card-body">
-                    <h5 class="card-title">Task Name: ${task.name}</h5>
-                    <p class="card-text">Description: ${task.description}</p>
-                    <p class="card-text">Assigned To: ${task.assignedTo}</p>
-                    <p class="card-text">Due Date: ${task.dueDate}</p>
-                    <p class="card-text">Status: ${task.status}</p>
-                    ${task.image ? `<img src="${task.image}" alt="Task Image" class="img-fluid mb-2">` : ''}
-                    <button class="btn btn-custom-edit btn-sm" onclick="editTask(${index})">Edit</button>
-                    ${task.status !== 'Completed' ? `<button class="btn btn-custom-delete btn-sm" onclick="deleteTask(${index})">Delete</button>` : ''}
-                </div>
-            </div>
-        `;
-        taskList.appendChild(taskItem);
+        // Prevent past due date if the task status is "To Do"
+        if (status === 'To Do' && new Date(dueDate) < new Date()) {
+            alert("Due date cannot be in the past for 'To Do' tasks.");
+            return;
+        }
+
+        const taskCard = createTaskCard(taskName, taskDescription, assignedTo, dueDate, status, taskImage);
+        taskList.appendChild(taskCard);
+        saveTask(taskName, taskDescription, assignedTo, dueDate, status, taskImage);
+
+        taskForm.reset();
     });
-};
 
-// Handle form submission to add or update a task
-taskForm.addEventListener('submit', function (event) {
-    event.preventDefault();
+    commentForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const commentText = document.getElementById('commentText').value;
 
-    // Get image file and convert to base64
-    const fileInput = document.getElementById('taskImage');
-    const file = fileInput.files[0];
-    const reader = new FileReader();
+        const commentCard = createCommentCard(commentText);
+        commentList.appendChild(commentCard);
+        saveComment(commentText);
 
-    reader.onloadend = function () {
-        const newTask = {
-            name: taskForm.taskName.value,
-            description: taskForm.taskDescription.value,
-            assignedTo: taskForm.assignedTo.value,
-            dueDate: taskForm.dueDate.value,
-            status: taskForm.status.value,
-            image: reader.result // base64 image string
-        };
+        commentForm.reset();
+    });
 
-        if (editIndex !== null) {
-            tasks[editIndex] = newTask;
-            editIndex = null;
-        } else {
-            tasks.push(newTask);
+    function createTaskCard(taskName, taskDescription, assignedTo, dueDate, status, taskImage, taskId = Date.now()) {
+        const taskCard = document.createElement('div');
+        taskCard.classList.add('card', 'task-card', status.toLowerCase().replace(' ', '-'));
+        taskCard.style.width = '100%';
+        taskCard.dataset.id = taskId;
+
+        const taskCardBody = document.createElement('div');
+        taskCardBody.classList.add('card-body');
+
+        const taskTitle = document.createElement('h5');
+        taskTitle.classList.add('card-title');
+        taskTitle.innerText = taskName;
+
+        const taskText = document.createElement('p');
+        taskText.classList.add('card-text');
+        taskText.innerText = `${taskDescription}\nAssigned To: ${assignedTo}\nDue Date: ${dueDate}\nStatus: ${status}`;
+
+        const taskActions = document.createElement('div');
+
+        if (status !== 'Completed') {
+            const editButton = document.createElement('button');
+            editButton.classList.add('btn', 'btn-custom-edit', 'mr-2');
+            editButton.innerText = 'Edit';
+            editButton.addEventListener('click', () => {
+                editTask(taskCard, taskName, taskDescription, assignedTo, dueDate, status, taskId);
+            });
+
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('btn', 'btn-custom-delete');
+            deleteButton.innerText = 'Delete';
+            deleteButton.addEventListener('click', () => {
+                deleteTask(taskCard, taskId);
+            });
+
+            taskActions.appendChild(editButton);
+            taskActions.appendChild(deleteButton);
         }
 
-        displayTasks();
-        taskForm.reset();
-    };
-
-    if (file) {
-        reader.readAsDataURL(file);
-    } else {
-        // Handle case where no image is uploaded
-        const newTask = {
-            name: taskForm.taskName.value,
-            description: taskForm.taskDescription.value,
-            assignedTo: taskForm.assignedTo.value,
-            dueDate: taskForm.dueDate.value,
-            status: taskForm.status.value,
-            image: ''
-        };
-
-        if (editIndex !== null) {
-            tasks[editIndex] = newTask;
-            editIndex = null;
-        } else {
-            tasks.push(newTask);
+        if (taskImage) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('card-img-top');
+                taskCard.insertBefore(img, taskCardBody);
+            };
+            reader.readAsDataURL(taskImage);
         }
 
-        displayTasks();
-        taskForm.reset();
-    }
-});
+        taskCardBody.appendChild(taskTitle);
+        taskCardBody.appendChild(taskText);
+        taskCardBody.appendChild(taskActions);
+        taskCard.appendChild(taskCardBody);
 
-// Function to delete a task
-window.deleteTask = (index) => {
-    if (tasks[index].status !== 'Completed') {
-        tasks.splice(index, 1);
-        displayTasks();
-    } else {
-        alert("Cannot delete a completed task.");
+        return taskCard;
     }
-};
 
-// Function to edit a task
-window.editTask = (index) => {
-    const task = tasks[index];
-    if (task.status !== 'Completed') {
-        taskForm.taskName.value = task.name;
-        taskForm.taskDescription.value = task.description;
-        taskForm.assignedTo.value = task.assignedTo;
-        taskForm.dueDate.value = task.dueDate;
-        taskForm.status.value = task.status;
-        editIndex = index;
-    } else {
-        alert("Cannot edit a completed task.");
+    function createCommentCard(commentText, commentId = Date.now()) {
+        const commentCard = document.createElement('div');
+        commentCard.classList.add('card', 'task-card');
+        commentCard.style.width = '100%';
+        commentCard.dataset.id = commentId;
+
+        const commentCardBody = document.createElement('div');
+        commentCardBody.classList.add('card-body');
+
+        const commentContent = document.createElement('p');
+        commentContent.classList.add('card-text');
+        commentContent.innerText = commentText;
+
+        commentCardBody.appendChild(commentContent);
+        commentCard.appendChild(commentCardBody);
+
+        return commentCard;
     }
-};
 
-// Initial display of tasks
-displayTasks();
+    function saveTask(taskName, taskDescription, assignedTo, dueDate, status, taskImage, taskId = Date.now()) {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const newTask = { taskId, taskName, taskDescription, assignedTo, dueDate, status, taskImage: taskImage ? URL.createObjectURL(taskImage) : null };
+        tasks.push(newTask);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function saveComment(commentText, commentId = Date.now()) {
+        const comments = JSON.parse(localStorage.getItem('comments')) || [];
+        const newComment = { commentId, commentText };
+        comments.push(newComment);
+        localStorage.setItem('comments', JSON.stringify(comments));
+    }
+
+    function loadTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.forEach(task => {
+            const taskCard = createTaskCard(task.taskName, task.taskDescription, task.assignedTo, task.dueDate, task.status, null, task.taskId);
+            if (task.taskImage) {
+                const img = document.createElement('img');
+                img.src = task.taskImage;
+                img.classList.add('card-img-top');
+                taskCard.insertBefore(img, taskCard.querySelector('.card-body'));
+            }
+            taskList.appendChild(taskCard);
+        });
+    }
+
+    function loadComments() {
+        const comments = JSON.parse(localStorage.getItem('comments')) || [];
+        comments.forEach(comment => {
+            const commentCard = createCommentCard(comment.commentText, comment.commentId);
+            commentList.appendChild(commentCard);
+        });
+    }
+
+    function editTask(taskCard, taskName, taskDescription, assignedTo, dueDate, status, taskId) {
+        document.getElementById('taskName').value = taskName;
+        document.getElementById('taskDescription').value = taskDescription;
+        document.getElementById('assignedTo').value = assignedTo;
+        document.getElementById('dueDate').value = dueDate;
+        document.getElementById('status').value = status;
+
+        deleteTask(taskCard, taskId);
+    }
+
+    function deleteTask(taskCard, taskId) {
+        taskCard.remove();
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const updatedTasks = tasks.filter(task => task.taskId !== taskId);
+        localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+    }
 });

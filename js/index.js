@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     const taskForm = document.getElementById('taskForm');
     const toDoList = document.getElementById('toDoList');
     const inProgressList = document.getElementById('inProgressList');
