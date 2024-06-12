@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< Updated upstream
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,8 +62,154 @@
                     </div>
                 </div>
             </div>
+=======
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Planner</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-image: url("pool.jpg");
+        /* Path to your background image */
+        background-size: cover;
+        /* Cover the entire page */
+        background-repeat: no-repeat;
+        /* Do not repeat the image */
+        background-attachment: fixed;
+        /* Fixed background, scroll content */
+      }
+
+      .task-card {
+        margin-bottom: 10px;
+      }
+
+      .container {
+        background-color: rgba(255, 255, 255, 0.9);
+        /* White background with transparency */
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      .btn-custom-submit {
+        background-color: #4caf50;
+        /* Green */
+        color: white;
+      }
+
+      .btn-custom-edit {
+        background-color: #ffd700;
+        /* Gold */
+        color: black;
+      }
+
+      .btn-custom-delete {
+        background-color: #f44336;
+        /* Red */
+        color: white;
+      }
+
+      /* Hover colors based on task status */
+      .task-card.to-do:hover {
+        border-color: #00f;
+        /* Blue border */
+      }
+
+      .task-card.in-progress:hover {
+        border-color: #ffa500;
+        /* Orange border */
+      }
+
+      .task-card.completed:hover {
+        border-color: #0f0;
+        /* Green border */
+      }
+
+      /* New CSS for aligning status by the side */
+      .status-label {
+        display: inline-block;
+        width: 120px;
+        margin-right: 10px;
+      }
+
+      .status-value {
+        display: inline-block;
+        width: calc(100% - 130px); /* Adjust width accordingly */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container mt-5">
+      <h1 class="mb-4">Task Planner</h1>
+      <form id="taskForm">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="taskName">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="taskName"
+              placeholder="Enter task name"
+              required
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="status" class="status-label">Status</label>
+            <select class="form-control status-value" id="status" required>
+              <option value="To Do">To Do</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+>>>>>>> Stashed changes
         </div>
+        <div class="form-group">
+          <label for="taskDescription">Description</label>
+          <textarea
+            class="form-control"
+            id="taskDescription"
+            rows="3"
+            placeholder="Enter task description"
+            required
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="assignedTo">Assigned To</label>
+          <input
+            type="text"
+            class="form-control"
+            id="assignedTo"
+            placeholder="Enter assignee name"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="dueDate">Due Date</label>
+          <input type="date" class="form-control" id="dueDate" required />
+        </div>
+        <div class="form-group">
+          <label for="taskImage">Upload Image</label>
+          <input
+            type="file"
+            class="form-control"
+            id="taskImage"
+            accept="image/*"
+          />
+        </div>
+        <button type="submit" class="btn btn-custom-submit">Submit</button>
+      </form>
+
+      <h2 class="mt-5">Task List</h2>
+      <div id="taskList" class="row">
+        <!-- Task items will be inserted here -->
+      </div>
     </div>
+<<<<<<< Updated upstream
     
     <script src="https://replit.com/public/js/replit-badge-v2.js" theme="dark" position="bottom-right"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -103,3 +250,13 @@
 </body>
 </html>
 
+=======
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/index.js"></script>
+  </body>
+</html>
+>>>>>>> Stashed changes

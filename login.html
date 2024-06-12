@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login to iDaily</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      /* Additional CSS styles for the login page */
+      body {
+        background-image: url("try\ for\ i\ daily.jpg"); /* Adjust the path to your image */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif; /* Adding a default font family */
+      }
+      .login-form {
+        width: 300px;
+        margin: 0 auto;
+        text-align: center;
+        background-color: rgba(
+          255,
+          255,
+          255,
+          0.8
+        ); /* Adding a semi-transparent white background for the form */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Adding a subtle shadow effect */
+      }
+      .login-header {
+        margin-bottom: 20px;
+      }
+      .login-header img {
+        width: 100px; /* Adjust size as needed */
+        height: auto;
+      }
+      .password-strength {
+        margin-bottom: 20px;
+      }
+      .remember-me {
+        margin-bottom: 20px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      /* Button styles */
+      .login-form input[type="submit"] {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff; /* Blue */
+        transition: background-color 0.3s ease;
+      }
+      .login-form input[type="submit"]:hover {
+        background-color: #0056b3; /* Darker Blue */
+      }
+      /* Rest of your styles remain the same */
+      .social-login button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        color: white;
+        transition: background-color 0.3s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-form">
+      <div class="login-header">
+        <img src="I daily logo.jpg" alt="iDaily Logo" />
+        <h2>Login to iDaily</h2>
+      </div>
+      <form id="loginForm" method="post">
+        <div class="form-group">
+          <label for="email_phone">Email or Phone Number:</label>
+          <input type="text" id="email_phone" name="email_phone" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <div style="position: relative">
+            <input type="password" id="password" name="password" required />
+            <span
+              class="password-toggle-icon"
+              onclick="togglePasswordVisibility()"
+            >
+              <i class="far fa-eye"></i>
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password Strength:</label>
+          <progress id="password-strength-bar" value="0" max="100"></progress>
+        </div>
+        <div class="form-group">
+          <input type="checkbox" id="remember-me" name="remember-me" />
+          <label for="remember-me">Remember Me</label>
+        </div>
+        <input type="submit" value="Login" />
+      </form>
+      <p id="error-message">
+        <?php
+    // Check if the form is submitted
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      // Get the values from the form
+      $usernameOrEmail = $_POST["email_phone"];
+      $password = $_POST["password"];
+
+      // Simple validation
+      if (empty($usernameOrEmail) || empty($password)) {
+        // Handle empty fields
+        echo "Please fill in both fields.";
+      } else {
+        // Perform further validation if necessary
+        // For example, validate the username/email and password against your database
+        
+        // Dummy check for demonstration
+        if ($usernameOrEmail === "example@example.com" && $password === "password") {
+          // Successful login
+          echo "Login successful!";
+        } else {
+          // Invalid credentials
+          echo "Invalid username/email or password.";
+        }
+      }
+    }
+    ?>
+      </p>
+      <p>
+        Forgot your password? <a href="forgot_password.php">Reset it here</a>
+      </p>
+      <p>Don't have an account? <a href="signup.php">Sign Up</a></p>
+      <p>Or continue with:</p>
+      <div class="social-login">
+        <button
+          class="google"
+          onclick="signInWithGoogle()"
+          style="background-color: #db4437"
+        >
+          Google
+        </button>
+        <button
+          class="facebook"
+          onclick="signInWithFacebook()"
+          style="background-color: #3b5998"
+        >
+          Facebook
+        </button>
+        <button
+          class="x"
+          onclick="signInWithX()"
+          style="background-color: #000"
+        >
+          X
+        </button>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const loginForm = document.getElementById("loginForm");
+        const passwordField = document.getElementById("password");
+        const passwordStrengthBar = document.getElementById(
+          "password-strength-bar"
+        );
+
+        loginForm.addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent the default form submission
+
+          const usernameOrEmail = document.getElementById("email_phone").value;
+          const password = passwordField.value;
+
+          // Simple validation check
+          if (usernameOrEmail.trim() === "" || password.trim() === "") {
+            alert("Please fill in both fields.");
+            return;
+          }
+
+          if (!validateEmailOrPhone(usernameOrEmail)) {
+            alert("Please enter a valid email or phone number.");
+            return;
+          }
+
+          if (password.length < 8 || password.length > 16) {
+            alert("Password must be between 8 and 16 characters.");
+            return;
+          }
+
+          // Normally, here you would send the data to the server
+          console.log("Username or Email:", usernameOrEmail);
+          console.log("Password:", password);
+
+          // Simulating successful login
+          alert("Login successful!");
+
+          // Reset the form
+          loginForm.reset();
+        });
+
+        // Function to validate email or phone number format
+        function validateEmailOrPhone(input) {
+          // Email regex pattern
+          const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+          // Phone number regex pattern
+          const phonePattern = /^\d{10}$/;
+
+          return emailPattern.test(input) || phonePattern.test(input);
+        }
+
+        // Function to toggle password visibility
+        function togglePasswordVisibility() {
+          var toggleIcon = document.querySelector(".password-toggle-icon i");
+
+          if (passwordField.type === "password") {
+            passwordField.type = "text";
+            toggleIcon.classList.remove("far", "fa-eye");
+            toggleIcon.classList.add("fas", "fa-eye-slash");
+          } else {
+            passwordField.type = "password";
+            toggleIcon.classList.remove("fas", "fa-eye-slash");
+            toggleIcon.classList.add("far", "fa-eye");
+          }
+        }
+
+        // Function to calculate password strength
+        passwordField.addEventListener("input", function () {
+          const password = passwordField.value;
+          const strength = calculatePasswordStrength(password);
+          passwordStrengthBar.value = strength;
+        });
+
+        function calculatePasswordStrength(password) {
+          // Dummy implementation for demonstration
+          const length = password.length;
+          if (length < 6) return 0;
+          if (length < 10) return 50;
+          return 100;
+        }
+
+        // Your other script for social login here
+
+        function signInWithGoogle() {
+          // Logic to initiate OAuth authentication with Google
+        }
+
+        function signInWithFacebook() {
+          // Logic to initiate OAuth authentication with Facebook
+        }
+
+        function signInWithX() {
+          // Logic to initiate authentication with the third-party service
+        }
+      });
+    </script>
+  </body>
+</html>
