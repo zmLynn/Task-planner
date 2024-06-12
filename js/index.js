@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toDoList = document.getElementById('toDoList');
     const inProgressList = document.getElementById('inProgressList');
     const completedList = document.getElementById('completedList');
+   
 
     let editIndex = null; // To keep track of the task being edited
 
@@ -37,6 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
             }
 
+            
+
             taskItem.innerHTML = `
                 <div class="card task-card ${statusClass}">
                     <div class="card-header" onclick="toggleTaskDetails(${index})">
@@ -52,6 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button class="btn btn-custom-edit btn-sm" onclick="editTask(${index})">Edit</button>
                             <button class="btn btn-custom-delete btn-sm" onclick="deleteTask(${index})">Delete</button>
                         ` : ''}
+                        ${task.status === 'Completed' ? `
+                            <button class="btn btn-custom-delete btn-sm" onclick="deleteTask(${index})">Delete</button>
+                        ` : ''}
                         <div class="comment-section mt-3">
                             <h6>Comments</h6>
                             <ul class="list-group" id="commentList-${index}"></ul>
@@ -61,9 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
                             </form>
-                            ${task.status === 'Completed' ? `
-                                <button class="btn btn-custom-delete btn-sm" onclick="confirmDeleteTask(${index})">Delete Task</button>
-                            ` : ''}
                         </div>
                     </div>
                 </div>
@@ -188,6 +191,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+
+// Function to search tasks
+const searchTask = () => {
+    const searchInput = document.getElementById('searchInput').value.toLowerCase(); // Get search input value
+    const searchResults = tasks.filter(task => {
+        // Search for tasks whose name, description, or assignedTo field contains the search input
+        return task.name.toLowerCase().includes(searchInput) ||
+               task.description.toLowerCase().includes(searchInput) ||
+               task.assignedTo.toLowerCase().includes(searchInput);
+    });
+
+    // Display search results in dropdown menu
+    const searchResultsDropdown = document.getElementById('searchResults');
+    searchResultsDropdown.innerHTML = ''; // Clear previous search results
+
+    if (searchInput.trim() === '') {
+        searchResultsDropdown.innerHTML = '<p>Please enter a search term.</p>';
+    } else if (searchResults.length === 0) {
+        searchResultsDropdown.innerHTML = '<p>No matching tasks found.</p>';
+    } else {
+        searchResults.forEach(task => {
+            const resultItem = document.createElement('a');
+            resultItem.classList.add('dropdown-item');
+            resultItem.textContent = task.name; // Display task name (you can customize this)
+            resultItem.href = '#'; // Add a link to enable click handling
+            resultItem.onclick = () => highlightTask(task); // Highlight the clicked task
+            searchResultsDropdown.appendChild(resultItem);
+        });
+    }
+};
+
+// Function to highlight the selected task card
+const highlightTask = (task) => {
+    // Find the index of the task in the tasks array
+    const index = tasks.indexOf(task);
+    if (index !== -1) {
+        // Scroll to the task card
+        const taskCard = document.querySelector(`#task-details-${index}`);
+        taskCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Highlight the task card (you can customize the highlighting style)
+        taskCard.classList.add('highlight');
+        // Remove highlight after a short delay (optional)
+        setTimeout(() => {
+            taskCard.classList.remove('highlight');
+        }, 3000);
+    }
+};
+
     // Initial display of tasks
     displayTasks();
+    searchTask();
 });

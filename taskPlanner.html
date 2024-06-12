@@ -9,7 +9,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-image: url('pool.jpg');
+            background: url('pexels-codioful-7135121.jpg') no-repeat center center fixed;
             /* Path to your background image */
             background-size: cover;
             /* Cover the entire page */
@@ -18,6 +18,10 @@
             background-attachment: fixed;
             /* Fixed background, scroll content */
         }
+
+        .highlight {
+    border: 2px solid #ffc107; /* Change border color to highlight */
+}
 
 /* Task Card Styling */
 .task-card {
@@ -149,9 +153,9 @@
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search tasks" aria-label="Search"
-                    id="searchInput">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="button"
-                    onclick="searchTasks()">Search</button>
+                    id="searchInput" oninput="searchTask()">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="searchButton" onclick="searchTask()">Search</button>
+                <div id="searchResults" class="dropdown-menu" aria-labelledby="searchinput"></div>
             </form>
         </div>
     </nav>
@@ -221,6 +225,7 @@
                     </div>
                 </div>
             </div>
+            <div id="searchResults"></div>
         </div>
     </div>
 

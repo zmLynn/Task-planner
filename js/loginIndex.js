@@ -44,9 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (storedPassword && storedPassword === password) {
             alert('Login successful!');
             // Redirect to the main application page
-            window.location.href = 'index.html';
+            window.location.href = 'taskPlanner.html';
         } else {
             alert('Invalid username or password.');
         }
     });
+
+    // Additional code for task planner can go here
 });
