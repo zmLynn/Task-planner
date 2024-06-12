@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const toDoList = document.getElementById('toDoList');
     const inProgressList = document.getElementById('inProgressList');
     const completedList = document.getElementById('completedList');
+
     let editIndex = null; // To keep track of the task being edited
 
     // Load tasks from local storage
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         tasks.forEach((task, index) => {
             const taskItem = document.createElement('div');
-            taskItem.className = 'col-md-4';
+            taskItem.className = 'col-md-12'; // Adjust to full width of the column
 
             let statusClass = '';
             switch (task.status) {
@@ -38,8 +39,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             taskItem.innerHTML = `
                 <div class="card task-card ${statusClass}">
-                    <div class="card-body">
+                    <div class="card-header" onclick="toggleTaskDetails(${index})">
                         <h5 class="card-title">Task Name: ${task.name}</h5>
+                    </div>
+                    <div class="card-body task-details" id="task-details-${index}" style="display: none;">
                         <p class="card-text">Description: ${task.description}</p>
                         <p class="card-text">Assigned To: ${task.assignedTo}</p>
                         <p class="card-text">Due Date: ${task.dueDate}</p>
@@ -49,19 +52,43 @@ document.addEventListener('DOMContentLoaded', function () {
                             <button class="btn btn-custom-edit btn-sm" onclick="editTask(${index})">Edit</button>
                             <button class="btn btn-custom-delete btn-sm" onclick="deleteTask(${index})">Delete</button>
                         ` : ''}
+                        <div class="comment-section mt-3">
+                        <h6>Comments</h6>
+                        <ul class="list-group" id="commentList-${index}"></ul>
+                        <form class="comment-form" id="commentForm-${index}">
+                        <div class="form-group">
+                        <textarea class="form-control" rows="3" placeholder="Add comment" id="comment-${index}"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
+                        </form>
+                            ${task.status === 'Completed' ? `
+                                <button class="btn btn-custom-delete btn-sm" onclick="confirmDeleteTask(${index})">Delete Task</button>
+                            ` : ''}
+            </div>
                     </div>
+                     
                 </div>
             `;
 
-            // Append to the appropriate container based on status
+            // Prepend to the appropriate container based on status
             if (task.status === 'To Do') {
-                toDoList.appendChild(taskItem);
+                toDoList.prepend(taskItem);
             } else if (task.status === 'In Progress') {
-                inProgressList.appendChild(taskItem);
+                inProgressList.prepend(taskItem);
             } else if (task.status === 'Completed') {
-                completedList.appendChild(taskItem);
+                completedList.prepend(taskItem);
             }
         });
+    };
+
+    // Function to toggle task details visibility
+    window.toggleTaskDetails = (index) => {
+        const details = document.getElementById(`task-details-${index}`);
+        if (details.style.display === 'none') {
+            details.style.display = 'block';
+        } else {
+            details.style.display = 'none';
+        }
     };
 
     // Handle form submission to add or update a task
@@ -87,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 tasks[editIndex] = newTask;
                 editIndex = null;
             } else {
-                tasks.push(newTask);
+                tasks.unshift(newTask); // Add new task to the beginning of the array
             }
 
             saveTasksToLocalStorage();
@@ -112,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 tasks[editIndex] = newTask;
                 editIndex = null;
             } else {
-                tasks.push(newTask);
+                tasks.unshift(newTask); // Add new task to the beginning of the array
             }
 
             saveTasksToLocalStorage();
@@ -122,15 +149,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Function to delete a task
-    window.deleteTask = (index) => {
-        if (tasks[index].status !== 'Completed') {
-            tasks.splice(index, 1);
-            saveTasksToLocalStorage();
-            displayTasks();
-        } else {
-            alert("Cannot delete a completed task.");
-        }
-    };
+// Function to delete a task
+window.deleteTask = (index) => {
+    const confirmDelete = confirm("Are you sure you want to delete this task permanently?");
+    if (confirmDelete) {
+        tasks.splice(index, 1);
+        saveTasksToLocalStorage();
+        displayTasks();
+    }
+};
+
 
     // Function to edit a task
     window.editTask = (index) => {
