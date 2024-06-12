@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Planner</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('pexels-codioful-7135121.jpg') no-repeat center center fixed;
+            /* Path to your background image */
+            background-size: cover;
+            /* Cover the entire page */
+            background-repeat: no-repeat;
+            /* Do not repeat the image */
+            background-attachment: fixed;
+            /* Fixed background, scroll content */
+        }
+
+        .highlight {
+    border: 2px solid #ffc107; /* Change border color to highlight */
+}
+
+/* Task Card Styling */
+.task-card {
+    margin-bottom: 10px;
+    top: 0;
+    left: 0;
+    width: 100%; /* Make the task card take the full width of its parent */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.card-header {
+    cursor: pointer; /* Make the cursor a pointer to indicate it's clickable */
+    background-color: #f8f9fa; /* Light background color for header */
+    border-bottom: 1px solid #dee2e6; /* Bottom border for header */
+    padding: 10px 15px; /* Padding for header */
+}
+
+.task-details {
+    display: none; /* Hide the details section by default */
+}
+
+.card-body {
+    width: 100%; /* Make sure the card body takes the full width of the task card */
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.btn-custom-submit {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.btn-custom-edit {
+    background-color: #FFD700; /* Gold */
+    color: black;
+}
+
+.btn-custom-delete {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+/* Hover colors based on task status */
+.task-card.to-do:hover {
+    border-color: #00f; /* Blue border */
+}
+
+.task-card.in-progress:hover {
+    border-color: #ffa500; /* Orange border */
+}
+
+.task-card.completed:hover {
+    border-color: #0f0; /* Green border */
+}
+
+
+/* Task Card Styling */
+.task-card {
+    margin-bottom: 10px;
+    width: 100%; /* Make the task card take the full width of its parent */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+/* Additional Styling for Card Body */
+.card-body {
+    width: 100%; /* Make sure the card body takes the full width of the task card */
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.9); /* White background with transparency */
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column; /* Set flex direction to column */
+    width: 100%; /* Ensure container takes the full width of its parent */
+}
+
+.btn-custom-submit {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.btn-custom-edit {
+    background-color: #FFD700; /* Gold */
+    color: black;
+}
+
+.btn-custom-delete {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+/* Hover colors based on task status */
+.task-card.to-do:hover {
+    border-color: #00f; /* Blue border */
+}
+
+.task-card.in-progress:hover {
+    border-color: #ffa500; /* Orange border */
+}
+
+.task-card.completed:hover {
+    border-color: #0f0; /* Green border */
+}
+
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="Logo.jpeg" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+            iDaily
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="homepage.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search tasks" aria-label="Search"
+                    id="searchInput" oninput="searchTask()">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="searchButton" onclick="searchTask()">Search</button>
+                <div id="searchResults" class="dropdown-menu" aria-labelledby="searchinput"></div>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Task Form Column -->
+            <div class="col-md-4">
+                <form id="taskForm">
+                    <div class="form-group">
+                        <label for="taskName">Name</label>
+                        <input type="text" class="form-control" id="taskName" placeholder="Enter task name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription">Description</label>
+                        <textarea class="form-control" id="taskDescription" rows="3" placeholder="Enter task description"
+                                  required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignedTo">Assigned To</label>
+                        <input type="text" class="form-control" id="assignedTo" placeholder="Enter assignee name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dueDate">Due Date</label>
+                        <input type="date" class="form-control" id="dueDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select class="form-control" id="status" required>
+                            <option value="To Do">To Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskImage">Upload Image</label>
+                        <input type="file" class="form-control" id="taskImage" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-custom-submit">Submit</button>
+                </form>
+            </div>
+    
+            <!-- Task Lists Column -->
+            <div class="col-md-8">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="status-section">
+                                <div class="status-header">To Do</div>
+                                <div id="toDoList" class="row"></div>
+                            </div>
+                        </div>
+    
+                        <div class="col-md-4">
+                            <div class="status-section">
+                                <div class="status-header">In Progress</div>
+                                <div id="inProgressList" class="row"></div>
+                            </div>
+                        </div>
+    
+                        <div class="col-md-4">
+                            <div class="status-section">
+                                <div class="status-header">Completed</div>
+                                <div id="completedList" class="row"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="searchResults"></div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/index.js"></script>
+</body>
+
+</html>
